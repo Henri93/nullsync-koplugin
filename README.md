@@ -23,9 +23,9 @@ Works with KOReader 2024.x and newer on every platform KOReader runs on (Kindle,
 ## Reading Recap: how the podcast part works
 
 - When a book is opened, the plugin remembers where you are. That is the start of the next episode.
-- When you close the book or the device sleeps, if you've read at least 2 percent more (configurable) and it has been at least four hours since the last episode, the plugin extracts the text between the two positions with KOReader's own text APIs and `POST`s it to `/podcast/ingest` with your sync credentials.
-- The server writes a script about those pages following the instructions you set on the website, synthesizes audio, and adds the episode to your private RSS feed. The passage is used once and discarded.
-- **Make an episode from what I've read now** forces an episode immediately. **Start the next episode from here** resets the window.
+- When you close the book or the device sleeps, if you've read at least half a percent more (configurable), the plugin extracts the text between the two positions with KOReader's own text APIs and `POST`s it to `/podcast/ingest` with your sync credentials.
+- The server holds the day's passages encrypted and, at the hour you chose on the website (3 am local by default), writes a script about those pages following your instructions, synthesizes audio, adds the episode to your private RSS feed, and deletes the passages. Readers who chose "right away" get an episode per session instead, with nothing held at all.
+- **Send what I've read now** sends immediately. **Start counting from here** resets the window.
 
 Nothing is sent unless the podcast toggle is on, and only the text between the two positions ever leaves the device. Works for EPUB and other reflowable books (xpointer ranges) and for PDF and other page-based books (page ranges).
 

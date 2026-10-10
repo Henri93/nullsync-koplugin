@@ -73,7 +73,7 @@ _G.CUR = 300
 assert(Podcast.makeEpisode(plugin, true) == true)
 assert(sent.path == "/podcast/ingest" and sent.method == "POST" and #sent.body.text > 400 and sent.body.text:find("word11"))
 assert(Podcast.getMarker(ui).xp == "xp:300", "marker advanced after success")
-assert(_G.LAST_MSG:find("Episode on its way"), _G.LAST_MSG)
+assert(_G.LAST_MSG:find("Sent:"), _G.LAST_MSG)
 -- 402 from the server gives a subscription message
 plugin.callAPI = function() return false, "http_error", 402 end
 _G.CUR = 500

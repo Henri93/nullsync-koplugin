@@ -27,9 +27,11 @@ local Podcast = {}
 -- Server-side limits mirrored here so we never upload something that will be refused.
 Podcast.MIN_CHARS = 400
 Podcast.MAX_CHARS = 60000
--- Auto mode: only make an episode after this much of the book, and this long since the last one.
-Podcast.DEFAULT_MIN_PROGRESS = 0.02
-Podcast.DEFAULT_MIN_INTERVAL_S = 4 * 3600
+-- Auto mode: send a passage once at least this much of the book was read since the last
+-- send. The server groups the day's passages into one nightly episode per book (or makes an
+-- episode right away if the reader chose that), so there is no interval gate by default.
+Podcast.DEFAULT_MIN_PROGRESS = 0.005
+Podcast.DEFAULT_MIN_INTERVAL_S = 0
 
 local MARKER_KEY = "nullsync_podcast_marker"
 
@@ -192,7 +194,7 @@ function Podcast.makeEpisode(plugin, interactive)
         Podcast.setMarker(ui, result)
         if interactive then
             UIManager:show(InfoMessage:new{
-                text = T(_("Episode on its way: %1 to %2 of the book. It shows up in your podcast feed in a few minutes."),
+                text = T(_("Sent: %1 to %2 of the book. It becomes part of your next episode (nightly, or right away, depending on your podcast settings)."),
                     string.format("%d%%", math.floor((marker.percent or 0) * 100 + 0.5)),
                     string.format("%d%%", math.floor((result.percent or 0) * 100 + 0.5))),
                 timeout = 5,
@@ -208,7 +210,7 @@ function Podcast.makeEpisode(plugin, interactive)
         elseif code == 429 then
             msg = _("You've reached today's episode limit. The next reading session gets a fresh one tomorrow.")
         elseif code == 400 then
-            msg = _("The server needs a bit more new reading before it can make an episode.")
+            msg = _("The server needs a bit more new reading before it can use this.")
         else
             msg = T(_("Couldn't send this episode (%1)."), code or err)
         end

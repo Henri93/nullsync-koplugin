@@ -441,7 +441,7 @@ function NullSync:addToMainMenu(menu_items)
                 sub_item_table = {
                     {
                         text = _("Make episodes automatically"),
-                        help_text = _([[When you close a book or the device sleeps, the passage you read since the last episode is sent to your sync server, which turns it into a spoken episode for your private podcast feed. Only the text you actually read is sent, and the server keeps the episode, not the book. Needs a Reading Recap subscription at null-space.xyz/reader/podcast.]]),
+                        help_text = _([[When you close a book or the device sleeps, the passage you read since the last send goes to your sync server. Each night (or right away, if you chose that on the website) the server turns the day's reading into a spoken episode for your private podcast feed. Only the text you actually read is sent, and the server keeps the episode, not the book. Needs a Reading Recap subscription at null-space.xyz/reader/podcast.]]),
                         checked_func = function() return self.settings.podcast_enabled end,
                         callback = function()
                             self.settings.podcast_enabled = not self.settings.podcast_enabled
@@ -451,7 +451,7 @@ function NullSync:addToMainMenu(menu_items)
                         end,
                     },
                     {
-                        text = _("Make an episode from what I've read now"),
+                        text = _("Send what I've read now"),
                         keep_menu_open = true,
                         enabled_func = function()
                             return self.ui and self.ui.document ~= nil and self:getKOSyncSettings() ~= nil
@@ -461,8 +461,8 @@ function NullSync:addToMainMenu(menu_items)
                         end,
                     },
                     {
-                        text = _("Start the next episode from here"),
-                        help_text = _("Forget what was read before this point; the next episode covers only what you read from now on."),
+                        text = _("Start counting from here"),
+                        help_text = _("Forget what was read before this point; the next send covers only what you read from now on."),
                         keep_menu_open = true,
                         enabled_func = function() return self.ui and self.ui.document ~= nil end,
                         callback = function()
@@ -472,7 +472,7 @@ function NullSync:addToMainMenu(menu_items)
                     },
                     {
                         text_func = function()
-                            return T(_("Minimum new reading for an automatic episode: %1%"),
+                            return T(_("Minimum new reading before sending: %1%"),
                                 math.floor((self.settings.podcast_min_progress or Podcast.DEFAULT_MIN_PROGRESS) * 100 + 0.5))
                         end,
                         keep_menu_open = true,
